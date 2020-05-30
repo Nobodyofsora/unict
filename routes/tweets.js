@@ -42,23 +42,6 @@ router.post(
   },
 );
 
-router.post(
-  '/',
-  autenticationMiddleware.isAuth,
-  [check('tweet').isString().isLength({ min: 1, max: 120 })],
-  checkValidation,
-  function (req, res, next) {
-    const newTweet = new Tweet(req.body);
-    newTweet._author = res.locals.authInfo.userId;
-    newTweet.save(function (err) {
-      if (err) {
-        return res.status(500).json({ error: err });
-      }
-      res.status(201).json(newTweet);
-    });
-  },
-);
-
 router.put(
   '/:id' /*, autenticationMiddleware.isAuth*/,
   [check('tweet').isString().isLength({ min: 1, max: 120 })],

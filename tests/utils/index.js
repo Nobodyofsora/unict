@@ -22,3 +22,12 @@ module.exports.createTweet = (user) => {
     tweet: 'Hello world',
   });
 };
+module.exports.deleteTweet = (tweet) => {
+  tweet ? tweet.remove() : console.log('cannot delete tweet');
+  user ? user.remove() : console.log('cannot delete user');
+};
+
+module.exports.deleteAll = () => {
+  User.deleteMany({});
+  Tweet.deleteMany({});
+};

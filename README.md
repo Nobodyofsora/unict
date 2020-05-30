@@ -4,11 +4,11 @@
   <img src=https://i.imgur.com/nUnIWCS.jpg alt=SteveJobs Academy>
 </p>
 
-This project is focused on the creation of the bee tests of this project https://github.com/drag0nman/unict
+This project is focused on the creation of the API tests of the [drag0nman/unict](https://github.com/drag0nman/unict) project.
 
 # _NPM commands:_
 
-:computer: Run `npm start` for a dev server. Navigate to http://localhost:4000/. The app will automatically reload if you change any of the source files.
+:computer: Run `npm start` for a server. Navigate to http://localhost:4000/. The app will automatically reload if you change any of the source files.
 
 :bug: Run `npm test` to execute the unit tests via Mocha.
 

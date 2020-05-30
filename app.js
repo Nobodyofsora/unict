@@ -15,7 +15,6 @@ const dbName = 'unict-innovation';
 
 const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
-<<<<<<< HEAD
 mongoose.connect('mongodb://' + host + '/' + dbName, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -24,13 +23,6 @@ mongoose.connect('mongodb://' + host + '/' + dbName, {
 const db = mongoose.connection;
 db.on('error', function () {
   console.error('Connection error!');
-=======
-mongoose.connect('mongodb://' + host + '/' + dbName, { useNewUrlParser: true, useUnifiedTopology: true });
-
-const db = mongoose.connection;
-db.on('error', function () {
-  console.error('Connection error!')
->>>>>>> 8ac22f9... fix test tweets
 });
 db.once('open', function () {
   console.log('DB connection Ready');

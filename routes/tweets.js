@@ -32,7 +32,7 @@ router.post(
   checkValidation,
   function (req, res, next) {
     const newTweet = new Tweet(req.body);
-    newTweet._author = res.locals.authInfo.userId;
+    //newTweet._author = res.locals.authInfo.userId;
     newTweet.save(function (err) {
       if (err) {
         return res.status(500).json({ error: err });

@@ -10,8 +10,8 @@ module.exports.expectJson = (request) => {
 module.exports.createUser = () => {
   return User.create({
     name: 'Manuel',
-    surname: 'Amato',
-    email: 'manuel.amato@stevejobs.academy',
+    surname: 'Caruso',
+    email: 'manuel.caruso@stevejobs.academy',
     password: '12345',
   });
 };
@@ -22,7 +22,7 @@ module.exports.createTweet = (user) => {
     tweet: 'Hello world',
   });
 };
-module.exports.deleteTweet = (tweet) => {
+module.exports.deleteTweet = (tweet, user) => {
   tweet ? tweet.remove() : console.log('cannot delete tweet');
   user ? user.remove() : console.log('cannot delete user');
 };

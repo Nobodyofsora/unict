@@ -2,11 +2,11 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../app');
 const expect = chai.expect;
-const { expectJson, createTweet, createUser } = require('./utils/index');
+const { expectJson, createTweet, createUser } = require('./utils/tweets');
 
 const Tweet = require('../models/tweet');
 const User = require('../models/user');
-const utils = require('./utils/index');
+const utils = require('./utils/tweets');
 
 const mongoose = require('mongoose');
 chai.use(chaiHttp);
@@ -20,12 +20,14 @@ describe('[SHOW] \n Returns all tweets', () => {
   });
 
   describe('If tweets exist', () => {
+    let user = undefined;
     let tweet = undefined;
     before('create tweet', async () => {
-      tweet = await utils.createTweet();
+      user = await utils.createUser();
+      tweet = await utils.createTweet(user);
     });
     after('delete tweet', () => {
-      utils.deleteTweet(tweet);
+      utils.deleteTweet(tweet, user);
     });
     it(' should return lenght 1', async () => {
       const result = await chai.request(app).get('/tweets');
@@ -50,11 +52,13 @@ describe('[SHOW] Returns a tweet', () => {
   });
   describe('If tweet exists', () => {
     let tweet = undefined;
+    let user = undefined;
     before('create tweet', async () => {
-      tweet = await utils.createTweet();
+      user = await utils.createUser();
+      tweet = await utils.createTweet(user);
     });
     after('delete tweet', () => {
-      utils.deleteTweet(tweet);
+      utils.deleteTweet(tweet, user);
     });
     it('should return that tweet', async () => {
       const result = await chai
@@ -87,6 +91,7 @@ describe('[CREATE] POST: /tweets', () => {
       _author: user._id,
       tweet: 'Example',
     });
+
     tweet = result.body;
 
     expect(result.status).to.be.equal(201);
@@ -103,8 +108,8 @@ describe('[EDIT] PUT: /tweets/:id', () => {
   });
 
   after('delete tweet', () => {
-    currentTweet ? currentTweet.remove() : console.log('missing tweet');
-    currentUser ? currentUser.remove() : console.log('missing user');
+    currentTweet ? currentTweet.deleteOne() : console.log('missing tweet');
+    currentUser ? currentUser.deleteOne() : console.log('missing user');
   });
 
   it('Edit tweet', async () => {
@@ -156,13 +161,14 @@ describe('[DELETE] DELETE: /tweets/:id', () => {
   let currentUser = undefined;
   let currentTweet = undefined;
 
-  before('Create tweet', async () => {
+  beforeEach('Create tweet', async () => {
     currentUser = await createUser();
     currentTweet = await createTweet(currentUser);
   });
 
-  after('delete user', () => {
-    currentUser ? currentUser.remove() : console.log('missing user');
+  afterEach('delete user', () => {
+    currentUser ? currentUser.deleteOne() : console.log('missing user');
+    currentTweet ? currentTweet.deleteOne() : console.log('missing tweet');
   });
 
   it('Delete user', async () => {

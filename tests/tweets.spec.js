@@ -11,7 +11,7 @@ const utils = require('./utils/index');
 const mongoose = require('mongoose');
 chai.use(chaiHttp);
 
-describe('[TWEETS] \n Returns all tweets', () => {
+describe('[SHOW] \n Returns all tweets', () => {
   it('should return lenght 0 if no tweets are found', async () => {
     const result = await chai.request(app).get('/tweets');
     expect(result.status).to.be.equal(200);
@@ -42,7 +42,7 @@ describe('[TWEETS] \n Returns all tweets', () => {
   // });
 });
 
-describe('Returns a tweet', () => {
+describe('[SHOW] Returns a tweet', () => {
   it('should return status 404 if tweet is missing', async () => {
     const id = mongoose.Types.ObjectId();
     const result = await chai.request(app).get(`/tweets/${id}`);
@@ -66,7 +66,7 @@ describe('Returns a tweet', () => {
   });
 });
 
-describe(' POST: /tweets', () => {
+describe('[CREATE] POST: /tweets', () => {
   let tweet = undefined;
   before('cleaning', () => {
     utils.deleteAll();

@@ -47,7 +47,7 @@ describe('[INDEX] GET: /users', () => {
 
 describe('[CREATE] POST: /users', () => {
   let createdUserId = undefined;
-  after('Delete user', async () => {
+  afterEach('Delete user', async () => {
     createdUserId
       ? await User.findByIdAndDelete(createdUserId)
       : console.log('Missing document');

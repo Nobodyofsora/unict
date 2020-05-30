@@ -22,7 +22,7 @@ describe('[INDEX] GET: /users', () => {
       .contains('application/json');
   });
 
-  describe('Userinside database', async () => {
+  describe('User inside database', async () => {
     let createdUser = undefined;
     before('create user', async () => {
       createdUser = await createUser();
@@ -38,13 +38,6 @@ describe('[INDEX] GET: /users', () => {
       expect(result.status).to.equal(200);
       expect(result.body).to.be.instanceof(Array);
       expect(result.body).to.have.lengthOf(1);
-    });
-    it('Return expected user from db', async () => {
-      const result = await chai
-        .request(app)
-        .get(`/users/${createdUser.id.toString()}`);
-      expect(result.header).to.have.property('content-type');
-      expect(result.header['content-type']).contains('application/json');
     });
   });
 });

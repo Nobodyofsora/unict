@@ -21,10 +21,10 @@ mongoose.connect('mongodb://' + host + '/' + dbName, {
 });
 
 const db = mongoose.connection;
-db.on('error', function() {
+db.on('error', function () {
   console.error('Connection error!');
 });
-db.once('open', function() {
+db.once('open', function () {
   console.log('DB connection Ready');
 });
 
@@ -51,14 +51,14 @@ app.use('/users', userRouter);
 app.use('/tweets', tweetRouter);
 
 // Catch 404 errors
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // Error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({
     message: err.message,

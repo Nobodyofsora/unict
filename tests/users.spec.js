@@ -45,6 +45,31 @@ describe('[INDEX] GET: /users', () => {
   });
 });
 
+describe('[SHOW] GET: /users/:id', () => {
+  it('Return status 404 if user is missing', async () => {
+    const newObjectId = mongoose.Types.ObjectId();
+    const result = await chai.request(app).get(`/users/${newObjectId}`);
+    expect(result.status).to.be.equal(404);
+    expect(result.header).to.have.property('content-type');
+    expect(result.header['content-type']).contains('application/json');
+  });
+  describe('User inside database', () => {
+    let createdUser = undefined;
+    before('create user', async () => {
+      createdUser = await createUser();
+    });
+    after('delete user', async () => {
+      createdUser ? createdUser.remove() : console.log('missing user');
+    });
+    it('Return expected user from DB', async () => {
+      const result = await chai
+        .request(app)
+        .get(`/users/${createdUser._id.toString()}`);
+      expect(result.status).to.be.equal(200);
+      expect(result.body).to.has.property('_id', createdUser._id.toString());
+    });
+  });
+});
 describe('[CREATE] POST: /users', () => {
   let createdUserId = undefined;
   after('Delete user', async () => {
@@ -92,7 +117,6 @@ describe('[CREATE] POST: /users', () => {
     expect(result).to.has.property('status', 409);
   });
 });
-
 describe('[UPDATE] PUT: /users/:id', () => {
   it("should return 404 status if user doesn't exist", async () => {
     const newObjectId = mongoose.Types.ObjectId();
@@ -120,32 +144,6 @@ describe('[UPDATE] PUT: /users/:id', () => {
   });
 });
 
-describe('[SHOW] GET: /users/:id', () => {
-  it('Return status 404 if user is missing', async () => {
-    const newObjectId = mongoose.Types.ObjectId();
-    const result = await chai.request(app).get(`/users/${newObjectId}`);
-    expect(result.status).to.be.equal(404);
-    expect(result.header).to.have.property('content-type');
-    expect(result.header['content-type']).contains('application/json');
-  });
-  describe('User inside database', () => {
-    let createdUser = undefined;
-    before('create user', async () => {
-      createdUser = await createUser();
-    });
-    after('delete user', async () => {
-      createdUser ? createdUser.remove() : console.log('missing user');
-    });
-    it('Return expected user from DB', async () => {
-      const result = await chai
-        .request(app)
-        .get(`/users/${createdUser._id.toString()}`);
-      expect(result.status).to.be.equal(200);
-      expect(result.body).to.has.property('_id', createdUser._id.toString());
-    });
-  });
-});
-
 describe('[DELETE] DELETE: /users/:id', () => {
   it("should return 404 status if user doesn't exists", async () => {
     const newObjectId = mongoose.Types.ObjectId();
@@ -157,10 +155,10 @@ describe('[DELETE] DELETE: /users/:id', () => {
 
   describe('With an existing user', () => {
     let createdUser = undefined;
-    beforeEach('Create user', async () => {
+    before('Create user', async () => {
       createdUser = await createUser();
     });
-    afterEach('Delete user', () => {
+    after('Delete user', () => {
       createdUser ? createdUser.deleteOne() : console.log('Missing user');
     });
     it('Delete existing user', async () => {

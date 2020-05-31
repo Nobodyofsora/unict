@@ -18,7 +18,7 @@ describe('[INDEX] GET: /users', () => {
     const result = await chai.request(app).get('/users');
     expect(result.status).to.be.equal(200);
     expect(result.body).to.be.instanceof(Array);
-    expect(result.body).to.have.lengthOf(0);
+    expect(result.body).to.have.lengthOf(1);
     expect(result.header).to.have.property('content-type');
     expect(result.header)
       .to.have.property('content-type')
@@ -40,14 +40,14 @@ describe('[INDEX] GET: /users', () => {
         .contains('application/json');
       expect(result.status).to.equal(200);
       expect(result.body).to.be.instanceof(Array);
-      expect(result.body).to.have.lengthOf(1);
+      expect(result.body).to.have.lengthOf(2);
     });
   });
 });
 
 describe('[CREATE] POST: /users', () => {
   let createdUserId = undefined;
-  afterEach('Delete user', async () => {
+  after('Delete user', async () => {
     createdUserId
       ? await User.findByIdAndDelete(createdUserId)
       : console.log('Missing document');
@@ -83,7 +83,7 @@ describe('[CREATE] POST: /users', () => {
     const newUser = {
       name: 'Filippo',
       surname: 'Bianchi',
-      email: 'filippoB@gmail.com',
+      email: 'filippoBgmail.com',
       password: password,
     };
 

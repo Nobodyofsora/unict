@@ -13,6 +13,9 @@ const {
 const Tweet = require('../models/tweet');
 const User = require('../models/user');
 chai.use(chaiHttp);
+
+//TODO status 500
+
 describe('[SHOW] \n Returns all tweets', () => {
   it('should return lenght 0 if no tweets are found', async () => {
     const result = await chai.request(app).get('/tweets');
@@ -79,12 +82,15 @@ describe('[SHOW] Returns a tweet', () => {
 describe('[CREATE] POST: /tweets', () => {
   let currentUser = undefined;
   let currentTweet = undefined;
-  before('cleaning', () => {
-    deleteAll();
-  });
+
   after('delete tweet', async () => {
-    await Tweet.findByIdAndDelete(currentTweet._id);
-    await User.findByIdAndDelete(currentUser._id);
+    currentTweet
+      ? await Tweet.findByIdAndDelete(currentTweet._id)
+      : console.log("can't delete tweet");
+
+    currentUser
+      ? await currentUser.deleteOne()
+      : console.log("can't delete user");
   });
   it('should create a tweet', async () => {
     currentUser = await createUser();
@@ -105,8 +111,8 @@ describe('[EDIT] PUT: /tweets/:id', () => {
     currentTweet = await createTweet(currentUser);
   });
 
-  after('delete tweet', () => {
-    deleteTweet(currentTweet, currentUser);
+  after('delete tweet', async () => {
+    await deleteTweet(currentTweet, currentUser);
   });
 
   it('Edit tweet', async () => {
@@ -147,7 +153,7 @@ describe('[EDIT] PUT: /tweets/:id', () => {
     const result = await chai
       .request(app)
       .put(`/tweets/${mongoose.Types.ObjectId()}`)
-      .send({ tweet: Array(140).join('x') });
+      .send({ tweet: Array(140).join('x') }); //Questo join è pazzo
 
     expectJson(result);
     expect(result).to.have.property('status', 400);
@@ -163,11 +169,11 @@ describe('[DELETE] DELETE: /tweets/:id', () => {
     currentTweet = await createTweet(currentUser);
   });
 
-  after('delete user', () => {
-    currentUser ? currentUser.remove() : console.log('missing user');
+  after('delete user', async () => {
+    currentUser ? await currentUser.remove() : console.log('missing user');
   });
 
-  it('Delete user', async () => {
+  it('Delete tweet', async () => {
     const result = await chai
       .request(app)
       .delete(`/tweets/${currentTweet._id.toString()}`);

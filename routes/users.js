@@ -25,16 +25,14 @@ router.get('/:id', function (req, res, next) {
 
 router.post(
   '/',
-  /*[
-  check('name').isString(),
-  check('surname').isString(),
-  check('email').isEmail(),
-  check('password').isString().isLength({ min: 5 })
-], checkValidation,*/ function (
-    req,
-    res,
-    next,
-  ) {
+  [
+    check('name').isString(),
+    check('surname').isString(),
+    check('email').isEmail(),
+    check('password').isString().isLength({ min: 5 }),
+  ],
+  checkValidation,
+  function (req, res, next) {
     const newUser = new User(req.body);
     newUser.password = new Buffer(
       crypto.createHash('sha256').update(req.body.password, 'utf8').digest(),

@@ -18,7 +18,7 @@ describe('[INDEX] GET: /users', () => {
     const result = await chai.request(app).get('/users');
     expect(result.status).to.be.equal(200);
     expect(result.body).to.be.instanceof(Array);
-    expect(result.body).to.have.lengthOf(1);
+    expect(result.body).to.have.lengthOf(0);
     expect(result.header).to.have.property('content-type');
     expect(result.header)
       .to.have.property('content-type')
@@ -40,7 +40,7 @@ describe('[INDEX] GET: /users', () => {
         .contains('application/json');
       expect(result.status).to.equal(200);
       expect(result.body).to.be.instanceof(Array);
-      expect(result.body).to.have.lengthOf(2);
+      expect(result.body).to.have.lengthOf(1);
     });
   });
 });
@@ -111,10 +111,9 @@ describe('[CREATE] POST: /users', () => {
       email: 'filippoBgmail.com',
       password: password,
     };
-
     const result = await chai.request(app).post(`/users`).send(newUser);
     expectJson(result);
-    expect(result).to.has.property('status', 409);
+    expect(result).to.has.property('status', 400);
   });
 });
 describe('[UPDATE] PUT: /users/:id', () => {
